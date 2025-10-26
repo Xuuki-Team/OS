@@ -22,3 +22,15 @@
 +-------------------------------------+
 ```
 <pre>
+
+# Xuuki OS Installer API
+Automated Arch Linux installation via a single API call.
+
+Xuuki OS Installer is a Node HTTP API that delivers a Bash script for automating Arch Linux installations.
+From a live environment, you can call the API and pipe the script directly into your shell:
+
+<pre>
+```bash
+bash <(curl -s https://xuuki.xyz/os/i5250M)
+```
+<pre>
