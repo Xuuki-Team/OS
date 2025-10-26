@@ -1,0 +1,124 @@
+Version control for user home directories involved in admin and dev    
+tasks at xuuki.xyz.
+
+# Booting iso from live usb (from the home repo)
+Have the wifi password, network name and network interface handy.
+
+To confirm network interface name:
+
+```bash
+ip addr show
+```
+
+Enter wifi credentials:
+
+```bash
+iwctl --passphrase="wifi password" station wlan0 connect "Network Name" 
+```
+
+To ssh into live usb set the root user password with:
+
+```bash
+passwd
+```
+
+If using device separate from the from another device. You can 
+view ip address from the host with the live usb mounted:
+
+```bash
+ip addr show
+```
+
+On separate device
+```bash
+ssh root@ipaddress
+```
+
+Log into bitwarden:
+```bash
+bash <(curl -L 192.168.1.111:3001/os-install/8)
+```
+
+ssh keys for git:
+```bash
+bash <(curl -L 192.168.1.111:3001/api/9)
+```
+
+Remote to home repo
+```bash
+bash <(curl -L 192.168.1.111:3001/api/10)
+```
+
+```bash
+cd                                                                           
+git clone https://aur.archlinux.org/yay.git                                 
+cd yay/                                                                     
+makepkg -si                                                                 
+yay -S midicsv
+```
+
+Remember to set up bats core:
+.local/bin/set-up-bats.sh
+
+Rclone is a faff to connect to atm.
+
+The command:
+
+```bash
+rclone config reconnect gdrive:
+```
+
+needs to be executed on the remote device. The output
+then needs to be copied to my mobile
+Why?
+The tablet doesn't load the web brouser
+the phone does
+Then login to the google account
+2 factor authentication
+Saw success, but rclone attempt didn't work on remote device
+Pressed back on mobile, then got couple more pages to confirm login
+Then rclone connected on remote
+
+Proceeding setup steps without api.
+
+# Dev Fire Wall
+sudo iptables -A INPUT -i docker0 -p tcp --dport 3001 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 3001 -j DROP
+To reverse the actions of the iptables rules you added, you need to delete them. You can use the -D 
+option with iptables to remove specific rules. Here's how you can reverse the actions:              
+
+ 1 Delete the rule that drops packets on port 3001:                                                 
+                                                                                                    
+    sudo iptables -D INPUT -p tcp --dport 3001 -j DROP                                              
+                                                                                                    
+ 2 Delete the rule that accepts packets on port 3001 from the docker0 interface:                    
+                                                                                                    
+    sudo iptables -D INPUT -i docker0 -p tcp --dport 3001 -j ACCEPT                                 
+                                                                                                    
+
+Make sure to run these commands with sudo to have the necessary permissions.                        
+# Server configuration
+
+```Config changes promoted to production need to install certificates
+  sudo certbot install --cert-name xuuki.xyz
+```
+
+# Order To Run Tests
+```
+bats tests/home-dir-for-server-site.bats
+```
+
+# NOTES
+When serving images for a website using Nginx, it's common to store them
+in a directory within the web root, such as /usr/share/nginx/html/home/images/. 
+This keeps HTML and assets organized and easily accessible. You can then 
+reference these images in your HTML using relative paths, like <img src="images/myimage.jpg" alt="Description">.                                                     
+
+This task can be both a system administration and a developer           
+responsibility. System administrators typically set up the server and   
+directory structure, while developers handle the content and ensure     
+paths are correctly referenced in the HTML. Collaboration between both  
+roles is often necessary for optimal setup.                             
+
+# mariadb
+mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
