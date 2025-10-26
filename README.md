@@ -1,3 +1,4 @@
+<pre>
 ``` System environment (Arch Linux)
 +-------------------------------------+    +----------------------------+
 |          User Interface (TUI/UI)    |    |       File System (FSH)     |
@@ -20,5 +21,5 @@
 | (CPU, RAM, Disk, Network Devices)   |
 +-------------------------------------+
 ```
-
+<pre>
 
