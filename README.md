@@ -33,7 +33,7 @@ From a live environment, you can call the API and pipe the script directly into 
 bash <(curl -s https://xuuki.xyz/os/i52520M)
 <pre>
 
-## Usage
+# Usage
 
 1. Boot from Arch Linux live ISO.
 2. Open a terminal.
