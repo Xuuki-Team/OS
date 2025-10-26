@@ -29,11 +29,3 @@ Xuuki OS Installer is a Node HTTP API that delivers a Bash script for automating
 From a live environment, you can call the API and pipe the script directly into your shell:
 
 bash <(curl -s https://xuuki.xyz/os/i52520M)
-
-# Usage
-
-1. Boot from Arch Linux live ISO.
-2. Open a terminal.
-3. Run:
-
-bash <(curl -s https://xuuki.xyz/os/i52520M)
