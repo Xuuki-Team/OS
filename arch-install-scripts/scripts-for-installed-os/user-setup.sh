@@ -15,7 +15,7 @@ if [ $? -eq 0 ]; then
     echo "BW_SESSION has been set."                                                                                  
 else                                                                                                                 
     echo "Login failed."                                                                                             
-    exit 1                                                                                                           
+#    exit 1                                                                                                           
 fi                                                                                                                   
                                                                                                                      
 # Check if .ssh directory exists, if not, create it                                                                  
@@ -43,8 +43,8 @@ echo "Public key saved to $HOME/.ssh/id_ed25519.pub"
 # Initialize git repository and configure remote                                                                     
 git init                                                                                                             
 ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts                                                              
-git remote add origin git@github.com:JoelNash-Xuuki/home.git                                                         
-git remote -v                                                                                                        
+#git remote add origin git@github.com:JoelNash-Xuuki/home.git                                                         
+#git remote -v                                                                                                        
 ssh -T git@github.com                                                                                                
                                                                                                                      
 # Configure git user                                                                                                 
@@ -52,8 +52,8 @@ git config --global user.email "$email"
 git config --global user.name "Joel Nash"                                                                            
                                                                                                                      
 # Fetch and checkout main branch                                                                                     
-git fetch origin                                                                                                     
-git checkout -b main origin/main                                                                                     
+#git fetch origin                                                                                                     
+#git checkout -b main origin/main                                                                                     
                                                                                                                      
 # Retrieve the GitHub token from Bitwarden                                                                           
 GH_TOKEN=$(bw get item e695061e-5f46-46b3-a40c-b1d2011f7fe3 | jq -r '.notes' | sed 's/GH_TOKEN=//' | tr -d '"')      

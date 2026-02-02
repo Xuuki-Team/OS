@@ -1,7 +1,7 @@
 #!/bin/bash                                                                                                                                                          
                                                                                                                                                                      
 # Define the target label                                                                                                                                            
-TARGET_LABEL="XuuKey"                                                                                                                                                
+TARGET_LABEL="XUUKEY"                                                                                                                                                
 MOUNT_POINT="/mnt/xuukey"                                                                                                                                                                   
 
 # Function to mount the device                                                                                                                                       
@@ -16,7 +16,7 @@ mount_device() {
     sleep 1
     sudo mount "$DEVICE_PATH" "$MOUNT_POINT"                                                                                                                         
     sleep 3
-    bash $MOUNT_POINT/connect-to-internet.sh
+    bash $MOUNT_POINT/connect-to-internet-iso.sh
     sleep 3
     bash $MOUNT_POINT/call-api.sh
   else                                                                                                                                                               
@@ -26,6 +26,7 @@ mount_device() {
                                                                                                                                                                      
 # Listen for device changes                                                                                                                                          
 while true; do                                                                                                                                                       
+  ip addr
   echo "Lock..."
   inotifywait -e create,delete /dev                                                                                                                                  
   echo " "

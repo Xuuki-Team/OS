@@ -1,0 +1,1 @@
+virt-install --name arch-vm1 --ram 2048 --vcpus 2 --os-variant archlinux --disk path=arch-vm1.qcow2,format=qcow2 --cdrom archlinux-2026.01.01-x86_64.iso --network user --graphics none --console pty,target_type=serial --noreboot

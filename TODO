@@ -1,0 +1,7 @@
+add this 
+[deployer@x230-qa ~]$ cat .xinitrc
+# Start the spice agent for mouse/clipboard sync
+/usr/bin/spice-vdagent &
+
+exec dwm
+

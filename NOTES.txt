@@ -1,3 +1,9 @@
+# for when the vm needs usb stick from host (run in vm)
+mkdir -p /mnt/usb
+mount -t 9p -o trans=virtio,version=9p2000.L xuushare /mnt/usb
+
+
+
 Version control for user home directories involved in admin and dev    
 tasks at xuuki.xyz.
 
