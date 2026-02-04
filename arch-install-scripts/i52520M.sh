@@ -54,7 +54,7 @@ mount "${DEVICE}3" /mnt
 # Install packages
 pacman -Sy
 pacman -Sy archlinux-keyring
-pacstrap -K /mnt base base-devel linux linux-firmware git vim wpa_supplicant github-cli grub openssh sudo arch-install-scripts parted github-cli git bitwarden-cli less wget docker python python-pip linux-headers jq libx11 libxft libxinerama xorg-server xorg-xinit libxinerama ttf-dejavu ttf-liberation
+pacstrap -K /mnt base base-devel linux linux-firmware git vim wpa_supplicant github-cli grub openssh sudo arch-install-scripts parted github-cli git bitwarden-cli less wget docker python python-pip linux-headers jq libx11 libxft libxinerama xorg-server xorg-xinit libxinerama ttf-dejavu ttf-liberation spice-vdagent qemu
 
 # Configure install system
 genfstab -U /mnt >> /mnt/etc/fstab
