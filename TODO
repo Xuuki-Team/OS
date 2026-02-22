@@ -1,7 +1,18 @@
+####
+
+This happens when i run setfont 
+
+setfont: ERROR kdfontop.c:240 put_font_kdfontop: ioctl(KDFONTOP): Invalid argument
+
+the terminal type is vt220. I'm connection via ssh so only the console is avaliabe at the moment
+
+###
+
 add this 
 [deployer@x230-qa ~]$ cat .xinitrc
 # Start the spice agent for mouse/clipboard sync
 /usr/bin/spice-vdagent &
 
 exec dwm
+
 
