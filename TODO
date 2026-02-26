@@ -1,18 +1,34 @@
-####
-
-This happens when i run setfont 
-
-setfont: ERROR kdfontop.c:240 put_font_kdfontop: ioctl(KDFONTOP): Invalid argument
-
-the terminal type is vt220. I'm connection via ssh so only the console is avaliabe at the moment
-
-###
-
-add this 
+# Add this ?
 [deployer@x230-qa ~]$ cat .xinitrc
 # Start the spice agent for mouse/clipboard sync
 /usr/bin/spice-vdagent &
 
 exec dwm
 
+# Debug
+sudo pacman -S sddm
+sudo systemctl enable sddm.service
+sudo systemctl start sddm.service
+
+ls /usr/share/sddm/themes/
+elarun maldives maya
+
+sudo sddm --example-config > /etc/sddm.conf
+
+when i edit [Theme] section in sddm.conf
+to one of the sddm themes then
+upon sddm.service restart sddm goes blank
+
+When i don't use a theme some default
+is used and sddm loads
+
+I pick user, enter password
+and dwm is used for the session.
+however upon first load i can still
+see the sddm login page...
+
+If i proceed with alt+shift+enter in dwm
+to open a new tile, it appears expected 
+however if i change page again the rpevious
+window somehow stays in the background?
 
