@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Ensure the correct USB device is used
-DEVICE="/dev/sdd"
-ISO_FILE="$HOME/xuukiarchiso/out/archlinux-2026.02.14-x86_64.iso"
+DEVICE="/dev/sdb"
+ISO_FILE="$HOME/xuukiarchiso/out/archlinux-2026.02.26-x86_64.iso"
 
 # Check if the device exists
 if [ ! -b "$DEVICE" ]; then
