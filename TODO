@@ -32,3 +32,6 @@ to open a new tile, it appears expected
 however if i change page again the rpevious
 window somehow stays in the background?
 
+UPDATE:
+Lightdm is running on UAT, steps need to be 
+replicated on dev and qa
