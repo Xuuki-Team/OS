@@ -77,7 +77,7 @@ After copying the files, restart LightDM (`sudo systemctl restart lightdm`) or l
    sudo plymouth-set-default-theme -R xuuki-splash
    ```
 4. Update `/etc/default/grub` so the boot flow stays hidden: `GRUB_TIMEOUT_STYLE=hidden`, `GRUB_TIMEOUT=1`, and  
-   `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash loglevel=3 vt.global_cursor_default=0 systemd.show_status=0 rd.udev.log_priority=3"`.  
+   `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash loglevel=3 vt.global_cursor_default=0 systemd.show_status=false rd.udev.log_priority=3"`.  
    Then regenerate the menu:  
    ```bash
    sudo grub-mkconfig -o /boot/grub/grub.cfg
