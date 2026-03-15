@@ -1,0 +1,24 @@
+--- /etc/grub.d/10_linux.orig	2026-03-15
++++ /etc/grub.d/10_linux	2026-03-15
+@@
+-  message="$(gettext_printf "Loading Linux %s ..." ${version})"
+-  sed "s/^/$submenu_indentation/" << EOF
+-	echo	'$(echo "$message" | grub_quote)'
+-	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} rw ${args}
+-EOF
++  sed "s/^/$submenu_indentation/" << EOF
++	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} rw ${args}
++EOF
+   if test -n "${initrd}" ; then
+     # TRANSLATORS: ramdisk isn't identifier. Should be translated.
+-    message="$(gettext_printf "Loading initial ramdisk ...")"
+     initrd_path=
+     for i in ${initrd}; do
+       initrd_path="${initrd_path} ${rel_dirname}/${i}"
+     done
+     sed "s/^/$submenu_indentation/" << EOF
+-	echo	'$(echo "$message" | grub_quote)'
+-	initrd	$(echo $initrd_path)
++	initrd	$(echo $initrd_path)
+ EOF
+   fi

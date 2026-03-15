@@ -82,6 +82,8 @@ After copying the files, restart LightDM (`sudo systemctl restart lightdm`) or l
    ```bash
    sudo grub-mkconfig -o /boot/grub/grub.cfg
    ```
+5. (Optional) To silence GRUB's "Loading Linux…" lines, apply `configs/grub/10_linux.no-echo.patch` to `/etc/grub.d/10_linux` before regenerating the config.
+
 
 ## Desktop wallpaper hook
 
