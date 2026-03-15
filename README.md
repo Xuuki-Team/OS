@@ -68,3 +68,25 @@ The service assumes the main X display is `:0`; adjust the `DISPLAY` and `XAUTHO
 
 After copying the files, restart LightDM (`sudo systemctl restart lightdm`) or log out/in so the new greeter + dwm wrapper take effect.
 
+## Plymouth splash + GRUB tweaks
+
+1. Copy the `configs/plymouth/xuuki-splash` folder to `/usr/share/plymouth/themes/xuuki-splash` (or adjust the paths in the `.plymouth` file if you keep it elsewhere).
+2. Point `/etc/plymouth/plymouthd.conf` at the theme (`Theme=xuuki-splash`, `ShowDelay=0`).
+3. Apply it and rebuild initramfs in one go:  
+   ```bash
+   sudo plymouth-set-default-theme -R xuuki-splash
+   ```
+4. Update `/etc/default/grub` so the boot flow stays hidden: `GRUB_TIMEOUT_STYLE=hidden`, `GRUB_TIMEOUT=1`, and  
+   `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash loglevel=3 vt.global_cursor_default=0 systemd.show_status=0 rd.udev.log_priority=3"`.  
+   Then regenerate the menu:  
+   ```bash
+   sudo grub-mkconfig -o /boot/grub/grub.cfg
+   ```
+
+## Desktop wallpaper hook
+
+Install `configs/dwm/xprofile` to `~/.xprofile` so the existing `~/desktop.sh` script regenerates + applies the wallpaper on every graphical login:  
+```bash
+install -Dm755 configs/dwm/xprofile "$HOME/.xprofile"
+```
+

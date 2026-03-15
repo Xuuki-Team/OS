@@ -1,0 +1,5 @@
+#!/bin/sh
+# Generate + set wallpaper each graphical login
+if [ -x "$HOME/desktop.sh" ]; then
+  "$HOME/desktop.sh" &
+fi
