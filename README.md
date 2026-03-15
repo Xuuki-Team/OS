@@ -52,7 +52,7 @@ Install/update them like this (per user):
 
 ```bash
 # Session wrapper
-install -Dm755 configs/dwm/start-dwm.sh "$HOME/.local/bin/start-dwm.sh"
+sudo install -Dm755 configs/dwm/start-dwm.sh /usr/local/bin/start-dwm.sh
 
 # Desktop entry (system-wide)
 sudo install -m644 configs/lightdm/dwm.desktop /usr/share/xsessions/dwm.desktop

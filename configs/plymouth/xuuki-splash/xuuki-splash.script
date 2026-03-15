@@ -2,18 +2,18 @@ screen = {}
 screen.w = Window.GetWidth()
 screen.h = Window.GetHeight()
 
-Plymouth.SetDefaultFont("DejaVu Sans Mono 32")
-
-# background image
 default_bg = Image("background.png")
 background = Sprite(default_bg)
-ratio = Math.Max(screen.w / default_bg.GetWidth(), screen.h / default_bg.GetHeight())
-background.SetScale(ratio, ratio, 1)
-background.SetX(Window.GetX() + screen.w / 2 - (default_bg.GetWidth() * ratio) / 2)
-background.SetY(Window.GetY() + screen.h / 2 - (default_bg.GetHeight() * ratio) / 2)
+scale_x = screen.w / default_bg.GetWidth()
+scale_y = screen.h / default_bg.GetHeight()
+scale = scale_x
+if (scale_y > scale)
+  scale = scale_y
+background.SetScale(scale, scale, 1)
+background.SetX(Window.GetX() + screen.w / 2 - (default_bg.GetWidth() * scale) / 2)
+background.SetY(Window.GetY() + screen.h / 2 - (default_bg.GetHeight() * scale) / 2)
 background.SetZ(-10)
 
-# title text
 title = {}
 title.image = Image.Text("xuuki os", 0.97, 0.97, 0.97)
 title.sprite = Sprite(title.image)
