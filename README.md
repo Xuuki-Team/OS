@@ -120,6 +120,12 @@ curl -LO 'https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/al
 echo "Hello world" | piper-tts --model ~/.local/share/piper-tts/models/en_GB-alba-medium.onnx --output_file /tmp/speech.wav && aplay /tmp/speech.wav
 ```
 
+The text can come from anywhere — hardcoded strings, scripts, or AI assistants piping generated responses. For example, with OpenClaw or another agent generating dynamic text:
+```bash
+# Agent-generated text piped to speech
+openclaw-response "What's the weather?" | piper-tts --model ~/.local/share/piper-tts/models/en_GB-alba-medium.onnx --output_file /tmp/response.wav && aplay /tmp/response.wav
+```
+
 **Helper script:**
 ```bash
 # From repo root
