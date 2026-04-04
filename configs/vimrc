@@ -2,6 +2,7 @@ imap jj <Esc>
 set nowrap
 set number 
 set relativenumber
+set background=light
 
 augroup AutoSaveFolds
   autocmd!
