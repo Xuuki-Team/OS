@@ -13,6 +13,7 @@ mount_device() {
   if [ -n "$DEVICE_PATH" ]; then                                                                                                                                     
     echo "Mounting device with label '$TARGET_LABEL'..."                                                                                                             
     sudo mkdir $MOUNT_POINT
+    sudo mkdir /mnt/os
     sleep 1
     sudo mount "$DEVICE_PATH" "$MOUNT_POINT"                                                                                                                         
     sleep 3

@@ -1,0 +1,90 @@
+screen = {}
+screen.w = Window.GetWidth()
+screen.h = Window.GetHeight()
+
+default_bg = Image("background.png")
+background = Sprite(default_bg)
+scale_x = screen.w / default_bg.GetWidth()
+scale_y = screen.h / default_bg.GetHeight()
+scale = scale_x
+if (scale_y > scale)
+  scale = scale_y
+background.SetScale(scale, scale, 1)
+background.SetX(Window.GetX() + screen.w / 2 - (default_bg.GetWidth() * scale) / 2)
+background.SetY(Window.GetY() + screen.h / 2 - (default_bg.GetHeight() * scale) / 2)
+background.SetZ(-10)
+
+title = {}
+title.image = Image.Text("xuuki os", 0.97, 0.97, 0.97)
+title.sprite = Sprite(title.image)
+title.sprite.SetX(Window.GetX() + screen.w / 2 - title.image.GetWidth() / 2)
+title.sprite.SetY(Window.GetY() + screen.h * 0.65)
+
+default_status_text = "initializing..."
+status = {}
+status.image = Image.Text(default_status_text, 0.85, 0.85, 0.85)
+status.sprite = Sprite(status.image)
+status.sprite.SetX(Window.GetX() + screen.w / 2 - status.image.GetWidth() / 2)
+status.sprite.SetY(Window.GetY() + screen.h * 0.78)
+progress_sprite = Sprite()
+progress_sprite.SetOpacity(0.8)
+
+phase = 0.0
+fun refresh_callback ()
+  {
+    phase += 0.02
+    opacity = 0.55 + 0.35 * (Math.Sin(phase) + 1) / 2
+    status.sprite.SetOpacity(opacity)
+  }
+Plymouth.SetRefreshFunction(refresh_callback)
+
+fun update_status(text)
+  {
+    if (text == nil || text == "")
+      text = default_status_text
+    status.image = Image.Text(text, 0.85, 0.85, 0.85)
+    status.sprite.SetImage(status.image)
+    status.sprite.SetX(Window.GetX() + screen.w / 2 - status.image.GetWidth() / 2)
+  }
+
+fun boot_progress_callback (duration, progress)
+  {
+    percent = Math.Int(progress * 100)
+    info = percent + "%"
+    progress_image = Image.Text(info, 0.82, 0.82, 0.82)
+    progress_sprite.SetImage(progress_image)
+    progress_sprite.SetX(Window.GetX() + screen.w / 2 - progress_image.GetWidth() / 2)
+    progress_sprite.SetY(Window.GetY() + screen.h * 0.87)
+  }
+Plymouth.SetBootProgressFunction(boot_progress_callback)
+
+fun display_normal_callback ()
+  {
+    update_status(default_status_text)
+  }
+Plymouth.SetDisplayNormalFunction(display_normal_callback)
+
+fun display_password_callback (prompt, bulletCount)
+  {
+    update_status("enter passphrase")
+  }
+Plymouth.SetDisplayPasswordFunction(display_password_callback)
+
+fun display_question_callback (prompt, entry)
+  {
+    update_status(prompt)
+  }
+Plymouth.SetDisplayQuestionFunction(display_question_callback)
+
+fun message_callback (text)
+  {
+    update_status(text)
+  }
+Plymouth.SetMessageFunction(message_callback)
+Plymouth.SetDisplayMessageFunction(message_callback)
+
+fun hide_message_callback (text)
+  {
+    update_status(default_status_text)
+  }
+Plymouth.SetHideMessageFunction(hide_message_callback)

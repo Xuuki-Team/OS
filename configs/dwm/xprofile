@@ -1,0 +1,7 @@
+#!/bin/sh
+if [ -x "$HOME/desktop.sh" ]; then
+  "$HOME/desktop.sh" &
+fi
+
+pkill -x dwmblocks >/dev/null 2>&1
+/usr/local/bin/dwmblocks > /tmp/dwmblocks.session.log 2>&1 &

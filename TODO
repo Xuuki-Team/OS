@@ -12,3 +12,17 @@ jnash-specific .xprofile notes:
 - Includes OpenClaw TUI auto-start
 - IRQ affinity setup for audio (only for jnash user)
 
+---
+Debug notes from iss1:
+sudo pacman -S sddm
+sudo systemctl enable sddm.service
+sudo systemctl start sddm.service
+
+ls /usr/share/sddm/themes/
+elarun maldives maya
+
+sudo sddm --example-config > /etc/sddm.conf
+
+# Theme issues: elarun/maldives/maya themes cause blank screen
+# No theme = default works
+# Lightdm running on UAT - replicate on dev/qa

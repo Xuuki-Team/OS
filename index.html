@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { background: #111; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #eee; font-family: monospace; }
+        #box { background: #222; padding: 30px; border-radius: 20px; border: 1px solid #444; text-align: center; }
+        input { display: block; margin: 10px auto; padding: 8px; border-radius: 8px; border: 1px solid #555; background: #000; color: #fff; }
+        button { padding: 8px 20px; border-radius: 8px; border: none; background: #555; color: white; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <h3>xuuki-greeter</h3>
+        <input type="text" id="user" placeholder="user" value="admin">
+        <input type="password" id="pass" placeholder="password">
+        <button onclick="start()">login</button>
+    </div>
+
+    <script>
+    // 1. The button triggers the start of authentication
+    function start() {
+        const username = document.getElementById('user').value;
+        // This tells LightDM: "I want to log in as this user"
+        window.lightdm.authenticate(username);
+    }
+
+    // 2. The SYSTEM calls this function when it is ready for the password
+    window.show_prompt = function(text, type) {
+        // text is usually "Password: "
+        // type 0 is a standard password prompt
+        const password = document.getElementById('pass').value;
+        window.lightdm.respond(password);
+    };
+
+    // 3. The SYSTEM calls this when the handshake is finished
+    window.authentication_complete = function() {
+        if (window.lightdm.is_authenticated) {
+            // Success! Launch dwm
+            window.lightdm.start_session("dwm");
+        } else {
+            // Failure - usually wrong password or user
+            alert("Auth Failed: Check your username/password");
+            location.reload();
+        }
+    };
+</script>
+
+    
+</body>
+</html>

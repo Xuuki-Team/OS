@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Xuuki Splash
+Description=Soft monochrome boot splash for Xuuki OS
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/xuuki-splash
+ScriptFile=/usr/share/plymouth/themes/xuuki-splash/xuuki-splash.script

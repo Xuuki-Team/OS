@@ -1,0 +1,16 @@
+[Unit]
+Description=dwmblocks status bar
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=%h/.Xauthority
+ExecStart=/usr/local/bin/dwmblocks
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
+WantedBy=default.target

@@ -15,11 +15,11 @@
 #     echo "No source file will be used."
 # fi
 
-source /mnt/usb/xuukey.conf
+source /mnt/xuukey/xuukey.conf
 
 # Set console layout and font
 loadkeys uk
-setfont ter-132b
+setfont 
 
 # Update system clock
 timedatectl set-timezone Europe/London
@@ -49,18 +49,19 @@ parted "$DEVICE" mkpart primary ext4 4098MiB 100%
 mkfs.ext4 "${DEVICE}3"
 
 # Mount the partitions
-mount "${DEVICE}3" /mnt
-
+mount "${DEVICE}3" /mnt/os
+ 
 # Install packages
 pacman -Sy
 pacman -Sy archlinux-keyring
-pacstrap -K /mnt base base-devel linux linux-firmware git vim wpa_supplicant github-cli grub openssh sudo arch-install-scripts parted github-cli git bitwarden-cli less wget docker python python-pip linux-headers jq libx11 libxft libxinerama xorg-server xorg-xinit libxinerama ttf-dejavu ttf-liberation spice-vdagent qemu
+echo "KEYMAP=uk" > /mnt/os/etc/vconsole.conf
+pacstrap -K /mnt/os base base-devel linux linux-firmware git vim wpa_supplicant github-cli grub openssh sudo arch-install-scripts parted github-cli git bitwarden-cli less wget docker python python-pip linux-headers jq libx11 libxft libxinerama xorg-server xorg-xinit libxinerama ttf-dejavu ttf-liberation
 
 # Configure install system
-genfstab -U /mnt >> /mnt/etc/fstab
-
+genfstab -U /mnt/os >> /mnt/os/etc/fstab
+  
 # Chroot and configure system
-cat << EOF > /mnt/root/chroot-script.sh
+cat << EOF > /mnt/os/root/chroot-script.sh
 #!/bin/bash
 
 # Set up locale
@@ -71,7 +72,7 @@ echo "LANG=en_GB.UTF-8" > /etc/locale.conf
 # Set up timezone
 ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 hwclock --systohc
-
+ 
 # Set root password
 echo "root:$ROOT_PASSWORD" | chpasswd
 
@@ -93,7 +94,7 @@ mkinitcpio -P
 EOF
 
 
-cat << EOF > /mnt/root/hostname.sh
+cat << EOF > /mnt/os/root/hostname.sh
 #!/bin/bash
 
 # Set up hostname
@@ -103,16 +104,17 @@ echo "::1         localhost" >> /etc/hosts
 echo "127.0.1.1   $HOSTNAME.localdomain $HOSTNAME" >> /etc/hosts
 EOF
 
-cat << EOF > /mnt/root/config-bootloader.sh
+cat << EOF > /mnt/os/root/config-bootloader.sh
 
 # Install and configure the bootloader
 grub-install --target=i386-pc $DEVICE
+echo "GRUB_CMDLINE_LINUX_DEFAULT=\"console=tty0 console=ttyS0,115200\"" | sudo tee -a /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
 EOF
 
 
-cat << EOF > /mnt/usr/local/bin/connect-to-internet.sh
+cat << EOF > /mnt/os/usr/local/bin/connect-to-internet.sh
 #!/bin/bash
 
 # Prompt for IP address and network interface
@@ -145,14 +147,14 @@ EOF
 
 # # Make the script executable
 
-chmod +x /mnt/root/chroot-script.sh
-chmod +x /mnt/root/hostname.sh
-chmod +x /mnt/root/config-bootloader.sh
-chmod +x /mnt/usr/local/bin/connect-to-internet.sh
+chmod +x /mnt/os/root/chroot-script.sh
+chmod +x /mnt/os/root/hostname.sh
+chmod +x /mnt/os/root/config-bootloader.sh
+chmod +x /mnt/os/usr/local/bin/connect-to-internet.sh
+ 
+#Run the script in the chroot environment
+arch-chroot /mnt/os /root/chroot-script.sh
+arch-chroot /mnt/os /root/hostname.sh
+arch-chroot /mnt/os /root/config-bootloader.sh
 
-# Run the script in the chroot environment
-arch-chroot /mnt /root/chroot-script.sh
-arch-chroot /mnt /root/hostname.sh
-arch-chroot /mnt /root/config-bootloader.sh
-
-# echo "Unmount everything after the script finishes: umount -R /mnt"
+echo "Unmount everything after the script finishes: umount -R /mnt/os"
