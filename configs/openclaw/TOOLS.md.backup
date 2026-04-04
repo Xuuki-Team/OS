@@ -1,0 +1,68 @@
+# TOOLS.md - Local Notes
+
+Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
+
+## What Goes Here
+
+Things like:
+
+- Camera names and locations
+- SSH hosts and aliases
+- Preferred voices for TTS
+- Speaker/room names
+- Device nicknames
+- Anything environment-specific
+
+## Examples
+
+```markdown
+### Cameras
+
+- living-room → Main area, 180° wide angle
+- front-door → Entrance, motion-triggered
+
+### SSH
+
+- home-server → 192.168.1.100, user: admin
+
+### TTS
+
+- Preferred voice: "Nova" (warm, slightly British)
+- Default speaker: Kitchen HomePod
+```
+
+## Why Separate?
+
+Skills are shared. Your setup is yours. Keeping them apart means you can update skills without losing your notes, and share skills without leaking your infrastructure.
+
+---
+
+## TTS (Text-to-Speech)
+
+### Piper TTS
+- **Executable:** `/usr/bin/piper-tts`
+- **Voices location:** `~/.local/share/piper-tts/models/`
+
+**Alba (Scottish Female)**
+- Model: `en_GB-alba-medium.onnx`
+- Quality: Medium
+- Speed: Good (real-time factor ~0.24)
+
+**Lessac (US Female)**
+- Model: `en_US-lessac-medium.onnx`
+- Quality: Medium
+
+**Usage:**
+```bash
+# Alba speaks
+echo "Your text here" | piper-tts --model ~/.local/share/piper-tts/models/en_GB-alba-medium.onnx --output_file /tmp/speech.wav && aplay /tmp/speech.wav
+
+# Or direct output (sometimes has buffer issues)
+echo "Your text" | piper-tts --model ~/.local/share/piper-tts/models/en_GB-alba-medium.onnx --output_raw | aplay -r 22050 -f S16_LE -c 1 -
+```
+
+**Audio specs:** 22.05kHz, 16-bit, mono
+
+---
+
+Add whatever helps you do your job. This is your cheat sheet.
