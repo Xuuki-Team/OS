@@ -92,3 +92,48 @@ Install `configs/dwm/xprofile` to `~/.xprofile` so the existing `~/desktop.sh` s
 install -Dm755 configs/dwm/xprofile "$HOME/.xprofile"
 ```
 
+---
+
+## Text-to-Speech (Piper TTS)
+
+Local neural TTS using [Piper](https://github.com/rhasspy/piper) — fast, offline, and runs on CPU.
+
+### Install
+```bash
+sudo pacman -S piper-tts-bin
+```
+
+### Download voices
+```bash
+mkdir -p ~/.local/share/piper-tts/models
+cd ~/.local/share/piper-tts/models
+
+# Alba (Scottish female, British English)
+curl -LO 'https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alba/medium/en_GB-alba-medium.onnx'
+curl -LO 'https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alba/medium/en_GB-alba-medium.onnx.json'
+```
+
+### Usage
+
+**Quick speak:**
+```bash
+echo "Hello world" | piper-tts --model ~/.local/share/piper-tts/models/en_GB-alba-medium.onnx --output_file /tmp/speech.wav && aplay /tmp/speech.wav
+```
+
+**Helper script:**
+```bash
+# From repo root
+./scripts/tts.sh "Hello from Alba"
+
+# Or pipe text
+echo "This is a test" | ./scripts/tts.sh
+```
+
+### Multi-machine setup
+For speaking on remote machines (e.g., x230), SSH in and run the same command:
+```bash
+ssh user@192.168.1.230 'echo "Hello from x230" | piper-tts --model ~/.local/share/piper-tts/models/en_GB-alba-medium.onnx --output_file /tmp/speech.wav && aplay /tmp/speech.wav'
+```
+
+Voice models are ~63MB each. Generation is real-time (~0.2x real-time factor on modern CPUs).
+
