@@ -1,0 +1,22 @@
+imap jj <Esc>
+set nowrap
+set number 
+set relativenumber
+
+augroup AutoSaveFolds
+  autocmd!
+  autocmd BufWinLeave * mkview
+  autocmd BufWinEnter * silent loadview
+augroup END
+
+" You can automate this in Vim using a snippet or a custom mapping. Here's how you  
+" can do it with a simple mapping:                                                       
+" Add the following lines to create a mapping for inserting the test template:        
+
+noremap <leader>but o@test "Test Name" {<CR>  output=$(command)<CR> expected_output=$(<file.txt)<CR>  [ "$output" == "$expected_output" ]<CR>}            
+
+" Now, whenever you press <leader>ut in normal mode, it will insert the test template at 
+" the current cursor position. You can replace <leader> with your preferred leader key   
+" (default is \). Adjust the template as needed.                                         
+
+autocmd BufNewFile *.sh 0r !echo '#!/bin/bash'

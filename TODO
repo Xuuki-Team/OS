@@ -5,3 +5,10 @@ add this
 
 exec dwm
 
+---
+jnash-specific .xprofile notes:
+- Uses user-specific dwmblocks binaries (dwmblocks-jnash, dwmblocks-admin)
+- Has wallpaper generation via desktop.sh
+- Includes OpenClaw TUI auto-start
+- IRQ affinity setup for audio (only for jnash user)
+
