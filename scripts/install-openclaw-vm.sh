@@ -3,7 +3,7 @@
 # Based on working QA VM configuration
 
 VM_NAME="openclaw-vm"
-ISO_PATH="/var/lib/libvirt/images/archlinux-2026.02.26-x86_64.iso"
+ISO_PATH="/var/lib/libvirt/images/archlinux-2026.04.01-x86_64.iso"
 DISK_PATH="/var/lib/libvirt/images/${VM_NAME}.qcow2"
 RAM_MB=4096
 VCPUS=2
@@ -29,10 +29,14 @@ if [ ! -f /mnt/xuukey/xuukey.conf ]; then
     sudo cp /mnt/xuukey.conf /mnt/xuukey/xuukey.conf 2>/dev/null || echo "Warning: No xuukey.conf found"
 fi
 
+# 5. DETECT ISO LABEL - Auto-detect from the ISO
+echo "Detecting ISO label..."
+ISO_LABEL=$(blkid -s LABEL -o value "$ISO_PATH" 2>/dev/null || echo "ARCH_202604")
+echo "Using ISO label: $ISO_LABEL"
+
 # 5. INSTALL: Launch the VM with console output enabled
 # Using --location (not --cdrom) for console output
 # Using --extra-args for serial console
-# Using --filesystem to mount xuukey share
 echo "Creating VM $VM_NAME..."
 sudo virt-install --name "$VM_NAME" --ram $RAM_MB --vcpus $VCPUS \
     --os-variant archlinux \
@@ -42,8 +46,7 @@ sudo virt-install --name "$VM_NAME" --ram $RAM_MB --vcpus $VCPUS \
     --graphics none \
     --console pty,target_type=serial \
     --noautoconsole \
-    --extra-args "console=ttyS0,115200n8 archisobasedir=arch archisolabel=ARCH_202602" \
-    --filesystem /mnt/xuukey,xuushare,mode=mapped
+    --extra-args "console=ttyS0,115200n8 archisobasedir=arch archisolabel=$ISO_LABEL" \
 
 echo ""
 echo "VM '$VM_NAME' is booting."
