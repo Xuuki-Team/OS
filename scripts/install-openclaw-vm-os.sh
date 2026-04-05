@@ -16,7 +16,7 @@ ROOT_PASSWORD="x"
 
 # Set console layout
 loadkeys uk
-setfont
+setfont || true
 
 # Update system clock
 timedatectl set-timezone Europe/London
@@ -42,8 +42,8 @@ mount "${DEVICE}1" /mnt/boot/efi
 
 # Install base system
 echo "Installing base packages..."
-pacman -Sy
-pacman -Sy archlinux-keyring
+# sync db
+pacman -Sy --noconfirm archlinux-keyring
 
 # Core packages for OpenClaw VM
 pacstrap -K /mnt base base-devel linux linux-firmware \
