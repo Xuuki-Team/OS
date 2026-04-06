@@ -8,7 +8,6 @@ const homeDir = os.homedir();
 
 // Paths to the files you want to serve
 const i52520M = '/usr/local/bin/os/i52520M.sh';
-const createOpenclawVM = '/usr/local/bin/os/create-openclaw-vm-auto.sh';
 
 // Create a server object
 const server = http.createServer((req, res) => {
@@ -22,18 +21,6 @@ const server = http.createServer((req, res) => {
         fs.readFile(i52520M, 'utf8', (err, data) => {
             if (err) {                                                                                                        
               console.error(`Error reading the script file at ${i52520M}:`, err);                              
-              res.writeHead(500, { 'Content-Type': 'text/plain' });                                                         
-              res.end('Error reading the script file.');                                                                   
-            } else {                                                                                                          
-                res.writeHead(200, { 'Content-Type': 'text/plain' });                                                         
-                res.end(data);                                                                                                
-            }
-        });
-    }
-    else if (req.url === '/os/create-openclaw-vm') {
-        fs.readFile(createOpenclawVM, 'utf8', (err, data) => {
-            if (err) {                                                                                                        
-              console.error(`Error reading the script file at ${createOpenclawVM}:`, err);                              
               res.writeHead(500, { 'Content-Type': 'text/plain' });                                                         
               res.end('Error reading the script file.');                                                                   
             } else {                                                                                                          
