@@ -140,3 +140,42 @@ install -Dm755 configs/dwm/xprofile "$HOME/.xprofile"
 ### Attempt 5 - Next Try
 - **Problem:** Serial console still not working
 - **Options:** Check GRUB install target, try virtio-console, check systemd getty
+
+
+### Attempt 5 - GRUB Append If Missing (FAILED)
+- **Date:** 2026-04-07
+- **Change:** Changed sed replace to grep||echo append pattern for GRUB_TERMINAL, GRUB_SERIAL_COMMAND
+- **Expected:** Lines would be added to /etc/default/grub since they dont exist in fresh install
+- **Actual:** Still blank screen after reboot
+- **Status:** FAILED
+
+### Attempt 6 - Next Ideas
+- **Problem:** Serial console not working after multiple GRUB config attempts
+- **Hypotheses:**
+  1. Serial device mismatch - VM uses isa-serial but maybe needs virtio-serial
+  2. systemd getty not enabled on ttyS0
+  3. GRUB not actually installing to MBR (pc-i386 target might be wrong)
+  4. Need to explicitly enable serial-getty service
+- **Next Options:**
+  1. Check systemd: systemctl enable serial-getty@ttyS0.service
+  2. Verify GRUB install target
+  3. Check actual serial device name in VM
+  4. Try adding earlyprintk to kernel params
+
+
+### Attempt 6 - Enable serial-getty@ttyS0 (FAILED)
+- **Date:** 2026-04-07
+- **Change:** Added systemctl enable serial-getty@ttyS0.service (like Arch ISO does)
+- **Expected:** Login prompt would spawn on ttyS0 after boot
+- **Actual:** Still blank screen, no login prompt
+- **Status:** FAILED
+
+### Attempt 7 - Debug the Real Issue
+- **Problem:** Serial console not working after 6 attempts
+- **Key Insight:** Arch ISO works fine - need to compare what it does
+- **New Hypotheses:**
+  1. Wrong serial device - maybe not ttyS0 but hvc0 (virtio-console)?
+  2. systemd not reaching multi-user.target?
+  3. Need to check /proc/consoles in the installed system
+  4. Maybe need to mask getty@tty1 and enable serial-getty as rescue shell?
+- **Next:** Need to inspect what the installed system actually sees

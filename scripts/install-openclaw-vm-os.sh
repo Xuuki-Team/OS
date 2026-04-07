@@ -114,12 +114,7 @@ cat << EOF > /mnt/os/root/config-bootloader.sh
 # Install and configure the bootloader
 grub-install --target=i386-pc $DEVICE
 
-# Enable serial console in GRUB
-sed -i 's/^GRUB_TERMINAL=.*/GRUB_TERMINAL="console serial"/' /etc/default/grub
-sed -i 's/^#GRUB_SERIAL_COMMAND=.*/GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"/' /etc/default/grub
-
-# Set kernel console for serial
-sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,115200"/' /etc/default/grub
+# Enable serial console in GRUB (append if not exists)grep -q "^GRUB_TERMINAL=" /etc/default/grub || echo GRUB_TERMINAL="console serial" >> /etc/default/grubgrep -q "^GRUB_SERIAL_COMMAND=" /etc/default/grub || echo GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1" >> /etc/default/grubgrep -q "^GRUB_CMDLINE_LINUX_DEFAULT=" /etc/default/grub && sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,115200"/" /etc/default/grub || echo GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,115200" >> /etc/default/grub
 
 grub-mkconfig -o /boot/grub/grub.cfg
 
@@ -168,3 +163,14 @@ arch-chroot /mnt/os /root/hostname.sh
 arch-chroot /mnt/os /root/config-bootloader.sh
 
 echo "Unmount everything after the script finishes: umount -R /mnt/os"
+
+# FIX Attempt 6: Enable serial console login (like Arch ISO)
+# The ISO spawns getty on ttyS0; we need to add it to installed system
+arch-chroot /mnt/os systemctl enable serial-getty@ttyS0.service
+# FIX added
+
+# FIX Attempt 7: Mount proc/sys/dev before enabling systemd services
+mount -t proc proc /mnt/os/proc && mount -t sysfs sys /mnt/os/sys && mount --bind /dev /mnt/os/dev
+# Now enable serial getty with proper env
+arch-chroot /mnt/os systemctl enable serial-getty@ttyS0.service
+# FIX added
