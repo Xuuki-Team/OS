@@ -92,3 +92,51 @@ Install `configs/dwm/xprofile` to `~/.xprofile` so the existing `~/desktop.sh` s
 install -Dm755 configs/dwm/xprofile "$HOME/.xprofile"
 ```
 
+## [CASE NOTES] VM Creation & Serial Console Setup
+
+**Goal:** Create `openclaw-vm` via `create-openclaw-vm-auto.sh`, install Arch OS using ISO, then reboot to working login prompt accessible via `virsh console`.
+
+### Attempt 1 - Initial Script Issues
+- **Problem:** Permission denied on `/var/lib/libvirt/images/` because script ran without `sudo`
+- **Fix:** Added root check `if [ "$EUID" -ne 0 ]` and `set -e`
+- **Result:** Script runs but VM crashes during install
+
+### Attempt 2 - OOM Crash (Host Memory)
+- **Problem:** `oom_reaper: reaped process (qemu-system-x86)` - VM killed during package install
+- **Discovery:** Host (x230) only has 3.5GB RAM, not 8GB
+- **Fix:** Reduced VM from 4GB → 2GB RAM, added swapfile (2GB) + swap partition (4GB) = 6GB total swap
+- **Result:** Install completes, but no login prompt after reboot
+
+### Attempt 3 - Serial Console Not Working
+- **Problem:** After reboot, `virsh console openclaw-vm` shows blank screen, no login prompt
+- **Cause:** GRUB not configured for serial console - only kernel had `console=ttyS0` params
+- **Current Fix (Testing):** Added proper GRUB serial config:
+  ```bash
+  GRUB_TERMINAL="console serial"
+  GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
+  ```
+- **Status:** PENDING - Need to reinstall VM with updated script to test
+
+### Key Files Modified
+- `create-openclaw-vm-auto.sh` - Added sudo check, `--filesystem` for xuukey mount
+- `scripts/install-openclaw-vm-os.sh` - Added swapfile creation, GRUB serial console config
+
+### Next Steps
+1. Destroy current VM: `sudo virsh destroy openclaw-vm && sudo virsh undefine openclaw-vm`
+2. Delete disk: `sudo rm -f /var/lib/libvirt/images/openclaw-vm.qcow2`
+3. Run: `sudo bash create-openclaw-vm-auto.sh`
+4. Inside VM: `bash /mnt/xuukey/install-openclaw-vm-os.sh`
+5. After reboot: `sudo virsh console openclaw-vm` - should see login prompt
+
+
+
+### Attempt 4 - GRUB Serial Config Added (FAILED)
+- **Date:** 2026-04-07
+- **Change:** Added GRUB_TERMINAL and GRUB_SERIAL_COMMAND to configure GRUB for serial console
+- **Expected:** GRUB menu visible via virsh console
+- **Actual:** Still blank screen after reboot
+- **Status:** FAILED
+
+### Attempt 5 - Next Try
+- **Problem:** Serial console still not working
+- **Options:** Check GRUB install target, try virtio-console, check systemd getty
