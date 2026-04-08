@@ -179,3 +179,20 @@ install -Dm755 configs/dwm/xprofile "$HOME/.xprofile"
   3. Need to check /proc/consoles in the installed system
   4. Maybe need to mask getty@tty1 and enable serial-getty as rescue shell?
 - **Next:** Need to inspect what the installed system actually sees
+
+### Attempt 12 - x220 VM Recreation FAILED
+Date: 2026-04-07
+Action: Destroyed and recreated x220 VM
+Expected: ISO login prompt
+Actual: rootfs shell instead
+Status: FAILED
+
+### Attempt 13 - CDROM Boot Method FAILED
+Date: 2026-04-08
+Change: Used --cdrom instead of --location
+Expected: ISO login prompt
+Actual: Blank screen - no output
+Status: FAILED
+
+### Pattern: x230 works, x220 fails
+Next: Investigate libvirt version diff
