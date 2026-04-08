@@ -46,7 +46,7 @@ virt-install \
     --graphics none \
     --console pty,target_type=serial \
     --noautoconsole \
-    --extra-args "console=ttyS0,115200n8 archisobasedir=arch archisolabel=ARCH_202604" \
+    --extra-args "console=ttyS0,115200n8 archisobasedir=arch archisolabel=ARCH_202602" \
     --filesystem /mnt/xuukey/,xuushare,mode=mapped \
     --boot hd,menu=off
 

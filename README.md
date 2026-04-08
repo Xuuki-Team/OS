@@ -196,3 +196,24 @@ Status: FAILED
 
 ### Pattern: x230 works, x220 fails
 Next: Investigate libvirt version diff
+
+### Attempt 12 - ISO Label Mismatch (ROOT CAUSE IDENTIFIED)
+- **Date:** 2026-04-09
+- **Problem:** x220 VM boots to [rootfs ~]# (initramfs emergency shell) instead of archiso login:
+- **Evidence:**
+  - x220 ISO label: ARCH_202604 (from blkid)
+  - Script hardcoded: archisolabel=ARCH_202602
+  - Mismatch → initramfs cannot find ISO → drops to emergency shell
+- **Root Cause:** ISO versions differ between x220 and x230
+  - x230: archlinux-2026.02.01-x86_64.iso with label ARCH_202602 ✓
+  - x220: Same filename but label ARCH_202604 (different download/build date)
+- **Fix:** Updated create-openclaw-vm-auto.sh on x220 to use correct label ARCH_202604
+- **Status:** VM recreated with corrected label - test pending
+
+### Attempt 12b - Sync ISO Between Hosts
+- **Date:** 2026-04-09
+- **Action:** Copied ISO from x230 to x220 to ensure identical labels
+- **Before:** x220 had different ISO with label ARCH_202604, script needed ARCH_202602
+- **After:** Both hosts now use same ISO with label ARCH_202602
+- **Verification:** blkid confirms LABEL="ARCH_202602" on x220
+- **Status:** VM recreated on x220 with synced ISO - ready for test
