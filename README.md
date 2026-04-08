@@ -179,3 +179,39 @@ install -Dm755 configs/dwm/xprofile "$HOME/.xprofile"
   3. Need to check /proc/consoles in the installed system
   4. Maybe need to mask getty@tty1 and enable serial-getty as rescue shell?
 - **Next:** Need to inspect what the installed system actually sees
+
+
+### Attempt 11 - Dual Machine Test (IN PROGRESS)
+- **Date:** 2026-04-07
+- **Setup:** Both x230 and x220 reset to clean state, synced to bugfix/vm-serial-console branch
+- **ISO:** Copied working ISO from x230 to x220 (1.5GB archlinux-2026.02.01-x86_64.iso)
+- **Network:** Fixed x220 libvirt network (was inactive)
+- **Boot Order:** Both VMs created with --boot hd,menu=off (disk first)
+- **Status:** IN PROGRESS - Both VMs running
+
+### Current State (16:40 GMT+1)
+
+**x230:**
+- VM ID: 37, State: running
+- Console: Shows Arch ISO login prompt ("archiso login: root")
+- Ready for install
+
+**x220:**
+- VM ID: 3, State: running
+- Console: Shows [rootfs ~]# prompt (different boot state)
+- May have already booted from disk or different init
+
+### Next Steps
+1. Run install script on x230: bash /mnt/xuukey/install-openclaw-vm-os.sh
+2. Check x220 state - may need reinstall or different approach
+3. After both installs complete, test serial console on reboot
+
+### Commands to Complete Install
+
+**On both machines:**
+
+
+
+**Inside VM (x230 - at ISO prompt):**
+
+
