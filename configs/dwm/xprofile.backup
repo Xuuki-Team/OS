@@ -1,0 +1,16 @@
+#!/bin/sh
+# Generate + set wallpaper each graphical login
+if [ -x "$HOME/desktop.sh" ]; then
+  "$HOME/desktop.sh" &
+fi
+
+# Start dwmblocks after X is up
+pkill -x dwmblocks >/dev/null 2>&1
+sleep 1
+export DISPLAY=:0
+/usr/local/bin/dwmblocks > /tmp/dwmblocks.session.log 2>&1 &
+
+# Auto-start OpenClaw TUI
+if [ -x "$HOME/.local/bin/start-openclaw-tui.sh" ]; then
+  "$HOME/.local/bin/start-openclaw-tui.sh" &
+fi

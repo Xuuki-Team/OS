@@ -1,7 +1,7 @@
 #!/bin/bash
 # install-qa-vm.sh
 
-VM_NAME="qa-vm"  # Changed from testvm
+VM_NAME="db-vm"  # Changed from testvm
 ISO_PATH="/var/lib/libvirt/boot/archlinux-2026.02.01-x86_64.iso"
 DISK_PATH="/var/lib/libvirt/images/${VM_NAME}.qcow2"
 RAM_MB=2048
@@ -32,9 +32,8 @@ sudo virt-install --name "$VM_NAME" --ram $RAM_MB --vcpus $VCPUS \
     --graphics none \
     --console pty,target_type=serial \
     --noautoconsole \
-    --extra-args "console=ttyS0,115200n8 archisobasedir=arch archisolabel=ARCH_202601" \
+    --extra-args "console=ttyS0,115200n8 archisobasedir=arch archisolabel=ARCH_202602" \
     --filesystem /mnt/xuukey/,xuushare,mode=mapped
 
 echo "QA VM '$VM_NAME' is booting."
 echo "Connect with: virsh --connect qemu:///system console $VM_NAME"
-

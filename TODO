@@ -1,11 +1,19 @@
-# Add this ?
+add this 
 [deployer@x230-qa ~]$ cat .xinitrc
 # Start the spice agent for mouse/clipboard sync
 /usr/bin/spice-vdagent &
 
 exec dwm
 
-# Debug
+---
+jnash-specific .xprofile notes:
+- Uses user-specific dwmblocks binaries (dwmblocks-jnash, dwmblocks-admin)
+- Has wallpaper generation via desktop.sh
+- Includes OpenClaw TUI auto-start
+- IRQ affinity setup for audio (only for jnash user)
+
+---
+Debug notes from iss1:
 sudo pacman -S sddm
 sudo systemctl enable sddm.service
 sudo systemctl start sddm.service
@@ -15,23 +23,6 @@ elarun maldives maya
 
 sudo sddm --example-config > /etc/sddm.conf
 
-when i edit [Theme] section in sddm.conf
-to one of the sddm themes then
-upon sddm.service restart sddm goes blank
-
-When i don't use a theme some default
-is used and sddm loads
-
-I pick user, enter password
-and dwm is used for the session.
-however upon first load i can still
-see the sddm login page...
-
-If i proceed with alt+shift+enter in dwm
-to open a new tile, it appears expected 
-however if i change page again the rpevious
-window somehow stays in the background?
-
-UPDATE:
-Lightdm is running on UAT, steps need to be 
-replicated on dev and qa
+# Theme issues: elarun/maldives/maya themes cause blank screen
+# No theme = default works
+# Lightdm running on UAT - replicate on dev/qa
