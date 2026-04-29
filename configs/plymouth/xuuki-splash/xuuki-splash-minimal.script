@@ -1,0 +1,4 @@
+bg_image=Image("background.png");
+bg_sprite=Sprite(bg_image);
+bg_sprite.SetX(Window.GetX());
+bg_sprite.SetY(Window.GetY());
