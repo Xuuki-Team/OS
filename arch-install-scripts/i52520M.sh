@@ -55,8 +55,20 @@ mount "${DEVICE}3" /mnt/os
 pacman -Sy
 pacman -Sy archlinux-keyring
 echo "KEYMAP=uk" > /mnt/os/etc/vconsole.conf
-pacstrap -K /mnt/os base base-devel linux linux-firmware git vim wpa_supplicant github-cli grub openssh sudo arch-install-scripts parted github-cli git bitwarden-cli less wget docker python python-pip linux-headers jq libx11 libxft libxinerama xorg-server xorg-xinit libxinerama ttf-dejavu ttf-liberation
+pacstrap -K /mnt/os base base-devel linux linux-firmware git vim wpa_supplicant github-cli grub openssh sudo arch-install-scripts parted github-cli git bitwarden-cli less wget docker python python-pip linux-headers jq libx11 libxft libxinerama xorg-server xorg-xinit libxinerama ttf-dejavu ttf-liberation xorg-xterm lightdm lightdm-slick-greeter plymouth papirus-icon-theme
 
+# Stage Xuuki desktop layer (run from the OS repo checkout; files copied into the target)
+# Assumes this script is executed with the OS repo at /mnt/xuukey/OS (xuukey USB) —
+# adjust XUUKEY_OS if the checkout lives elsewhere.
+XUUKEY_OS="$(cd "$(dirname "$0")/.." && pwd)"
+install -D -m 755 "$XUUKEY_OS/configs/dwm/start-dwm.sh" /mnt/os/usr/local/bin/start-dwm.sh
+install -D -m 644 "$XUUKEY_OS/configs/lightdm/dwm.desktop" /mnt/os/usr/share/xsessions/dwm.desktop
+install -D -m 644 "$XUUKEY_OS/configs/backgrounds" /mnt/os/usr/share/backgrounds/im.jpg
+install -D -m 755 "$XUUKEY_OS/configs/systemd/user/dwmblocks.service" /mnt/os/etc/systemd/user/dwmblocks.service
+install -d -m 755 /mnt/os/usr/share/plymouth/themes/xuuki-splash
+install -m 644 "$XUUKEY_OS/configs/plymouth/xuuki-splash/background.png" /mnt/os/usr/share/plymouth/themes/xuuki-splash/background.png
+install -m 644 "$XUUKEY_OS/configs/plymouth/xuuki-splash/xuuki-splash.plymouth" /mnt/os/usr/share/plymouth/themes/xuuki-splash/xuuki-splash.plymouth
+install -m 755 "$XUUKEY_OS/configs/plymouth/xuuki-splash/xuuki-splash.script" /mnt/os/usr/share/plymouth/themes/xuuki-splash/xuuki-splash.script
 # Configure install system
 genfstab -U /mnt/os >> /mnt/os/etc/fstab
   
@@ -87,6 +99,31 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: A
 # Create .local/bin directory for the new user
 mkdir -p /home/$NEW_USER/.local/bin
 chown -R $NEW_USER:$NEW_USER /home/$NEW_USER/.local
+
+# Xuuki desktop: .xinitrc (dwm if present, xterm fallback)
+cat << XINITRC > /home/$NEW_USER/.xinitrc
+#!/bin/bash
+
+if command -v dwm >/dev/null 2>&1; then
+    exec dwm
+fi
+exec xterm
+XINITRC
+chown $NEW_USER:$NEW_USER /home/$NEW_USER/.xinitrc
+
+# LightDM greeter background + enable display manager
+mkdir -p /etc/lightdm
+cat << GREETER > /etc/lightdm/slick-greeter.conf
+[Greeter]
+background=/usr/share/backgrounds/im.jpg
+GREETER
+systemctl enable lightdm
+
+# Plymouth splash (hook must precede mkinitcpio -P)
+plymouth-set-default-theme xuuki-splash
+if ! grep -q "plymouth" /etc/mkinitcpio.conf; then
+    sed -i 's/^HOOKS=(\(.*udev\)\(.*\))$/HOOKS=(\1 plymouth\2)/' /etc/mkinitcpio.conf
+fi
 
 echo "KEYMAP=uk" > /etc/vconsole.conf
 mkinitcpio -P
@@ -156,5 +193,10 @@ chmod +x /mnt/os/usr/local/bin/connect-to-internet.sh
 arch-chroot /mnt/os /root/chroot-script.sh
 arch-chroot /mnt/os /root/hostname.sh
 arch-chroot /mnt/os /root/config-bootloader.sh
+
+# Xuuki desktop layer: build dwm + enable user services
+git clone -q https://github.com/Xuuki-Team/dwm /mnt/os/root/dwm-build
+arch-chroot /mnt/os /bin/bash -lc "cd /root/dwm-build && make clean install"
+arch-chroot /mnt/os systemctl --global enable dwmblocks
 
 echo "Unmount everything after the script finishes: umount -R /mnt/os"
