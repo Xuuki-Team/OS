@@ -2,49 +2,153 @@
 <html>
 <head>
     <style>
-        body { background: #111; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #eee; font-family: monospace; }
-        #box { background: #222; padding: 30px; border-radius: 20px; border: 1px solid #444; text-align: center; }
-        input { display: block; margin: 10px auto; padding: 8px; border-radius: 8px; border: 1px solid #555; background: #000; color: #fff; }
-        button { padding: 8px 20px; border-radius: 8px; border: none; background: #555; color: white; cursor: pointer; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            background: linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+        }
+        
+        #box { 
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 60px;
+            border: 2px solid #333;
+            text-align: center;
+            box-shadow: 8px 8px 0 #333;
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h3 {
+            color: #222;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+        }
+        
+        input { 
+            display: block; 
+            margin: 15px auto; 
+            padding: 12px 16px;
+            width: 220px;
+            border: 2px solid #333;
+            background: #fff;
+            color: #222;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        
+        input:focus {
+            border-color: #555;
+            box-shadow: 3px 3px 0 #555;
+            transform: translate(-1px, -1px);
+        }
+        
+        input::placeholder {
+            color: #888;
+        }
+        
+        button { 
+            margin-top: 20px;
+            padding: 12px 40px;
+            border: 2px solid #333;
+            background: #333;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        button:hover {
+            background: #fff;
+            color: #333;
+            box-shadow: 4px 4px 0 #333;
+            transform: translate(-2px, -2px);
+        }
+        
+        button:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 #333;
+        }
+        
+        #status {
+            margin-top: 20px;
+            color: #666;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        #status.visible {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
     <div id="box">
         <h3>xuuki-greeter</h3>
-        <input type="text" id="user" placeholder="user" value="admin">
-        <input type="password" id="pass" placeholder="password">
+        <input type="text" id="user" placeholder="user" value="admin" autocomplete="off">
+        <input type="password" id="pass" placeholder="password" autocomplete="off">
         <button onclick="start()">login</button>
+        <div id="status"></div>
     </div>
 
     <script>
-    // 1. The button triggers the start of authentication
     function start() {
         const username = document.getElementById('user').value;
-        // This tells LightDM: "I want to log in as this user"
+        const status = document.getElementById('status');
+        status.textContent = 'authenticating...';
+        status.classList.add('visible');
         window.lightdm.authenticate(username);
     }
 
-    // 2. The SYSTEM calls this function when it is ready for the password
     window.show_prompt = function(text, type) {
-        // text is usually "Password: "
-        // type 0 is a standard password prompt
         const password = document.getElementById('pass').value;
         window.lightdm.respond(password);
     };
 
-    // 3. The SYSTEM calls this when the handshake is finished
     window.authentication_complete = function() {
+        const status = document.getElementById('status');
         if (window.lightdm.is_authenticated) {
-            // Success! Launch dwm
-            window.lightdm.start_session("dwm");
+            status.textContent = 'success!';
+            status.style.color = '#2a2';
+            setTimeout(() => {
+                window.lightdm.start_session("dwm");
+            }, 300);
         } else {
-            // Failure - usually wrong password or user
-            alert("Auth Failed: Check your username/password");
-            location.reload();
+            status.textContent = 'authentication failed';
+            status.style.color = '#a22';
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
         }
     };
 </script>
-
     
 </body>
 </html>
