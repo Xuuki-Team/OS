@@ -32,12 +32,22 @@ echo 'Configuring LightDM...'
 cat > /etc/lightdm/lightdm.conf << 'LMDEOF'
 [Seat:*]
 greeter-session=lightdm-webkit2-greeter
-greeter-environment=WEBKIT_DISABLE_DMABUF_RENDERER=1,WEBKIT_DISABLE_COMPOSITING_MODE=1
 LMDEOF
 
 cat > /etc/lightdm/lightdm-webkit2-greeter.conf << 'GREETEREOF'
 [greeter]
-webkit_theme=xuuki-greeter
+debug_mode = false
+detect_theme_errors = true
+screensaver_timeout = 300
+secure_mode = true
+time_format = LT
+time_language = auto
+webkit_theme = xuuki-greeter
+
+[branding]
+background_images = /usr/share/backgrounds
+logo = /usr/share/pixmaps/archlinux-logo.svg
+user_image = /usr/share/pixmaps/archlinux-user.svg
 GREETEREOF
 
 # Enable service
