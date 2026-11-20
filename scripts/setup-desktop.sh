@@ -8,6 +8,9 @@ set -e
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 NEW_USER="${NEW_USER:-admin}"
 
+# Pre-flight: repo working copy must be complete (heals accidental deletions)
+git -C "$REPO_DIR" restore dwmblocks/ scripts/ index.html configs/ 2>/dev/null || true
+
 echo "=== Xuuki desktop setup (repo: $REPO_DIR, user: $NEW_USER) ==="
 
 # 1. Packages
