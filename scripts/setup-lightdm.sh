@@ -32,6 +32,7 @@ echo 'Configuring LightDM...'
 cat > /etc/lightdm/lightdm.conf << 'LMDEOF'
 [Seat:*]
 greeter-session=lightdm-webkit2-greeter
+session-wrapper=/etc/lightdm/Xsession
 
 greeter-environment=WEBKIT_DISABLE_DMABUF_RENDERER=1
 LMDEOF

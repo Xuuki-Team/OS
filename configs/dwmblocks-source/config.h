@@ -1,12 +1,12 @@
-/* modify this file to change what commands output to your statusbar, and
- * recompile using the make command */
+/* modify this file to change what commands output to your statusbar.
+ * matches the verified working x230 status bar (news + weather + date + wifi). */
 
 static const Block blocks[] = {
 	/* command                interval    signal */
-	{ "date '+%a, %d %b 󰃭 %H:%M'",            30,      0 },
-	{ "$HOME/Projects/dwmblocks/wifi.sh",            5,        1 },
+	{ "cat ~/.cache/dwmblocks/news",        0,        5 },
+	{ "$HOME/dwmblocks/weather.sh",         300,      0 },
+	{ "$HOME/dwmblocks/date.sh",            30,       0 },
+	{ "$HOME/dwmblocks/wifi.sh",            5,        1 },
 };
 
-/* sets delimeter between status commands. NULL character ('\0') means no
- * delimeter */
 static char delim[] = "\x1f";
