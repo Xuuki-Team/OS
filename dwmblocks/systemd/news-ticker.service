@@ -1,0 +1,17 @@
+[Unit]
+Description=RSS news ticker for dwmblocks
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=%h/dwmblocks/bin/news-ticker.sh
+Restart=always
+RestartSec=5
+WorkingDirectory=%h
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
