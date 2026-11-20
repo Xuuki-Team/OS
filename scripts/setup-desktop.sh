@@ -26,6 +26,8 @@ for repo in dwm dwmblocks dmenu st; do
   [ -d /home/$NEW_USER/Projects/$repo/.git ] || \
     git clone -q https://github.com/Xuuki-Team/$repo /home/$NEW_USER/Projects/$repo || \
     git clone -q https://git.suckless.org/$repo /home/$NEW_USER/Projects/$repo
+  # ssh push URL so admin can push with his own key (https only used for keyless pull)
+  git -C /home/$NEW_USER/Projects/$repo remote set-url --push origin git@github.com:Xuuki-Team/$repo.git
 done
 chown -R $NEW_USER:$NEW_USER /home/$NEW_USER/Projects
 
