@@ -68,6 +68,7 @@ install -Dm 644 "$REPO_DIR/configs/backgrounds.jpg"         /usr/share/backgroun
 install -m 644 "$REPO_DIR/index.html"                   /usr/share/lightdm-webkit/themes/xuuki-greeter/index.html
 cat > /home/$NEW_USER/.xinitrc << EOF
 #!/bin/bash
+dwmblocks &
 exec dwm
 EOF
 chown $NEW_USER:$NEW_USER /home/$NEW_USER/.xinitrc
