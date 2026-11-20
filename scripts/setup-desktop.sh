@@ -75,6 +75,11 @@ dwmblocks &
 exec dwm
 EOF
 chown $NEW_USER:$NEW_USER /home/$NEW_USER/.xinitrc
+# LightDM sessions source ~/.xprofile (NOT .xinitrc) via the Xsession wrapper:
+printf "#!/bin/bash
+dwmblocks &
+" > /home/$NEW_USER/.xprofile
+chown $NEW_USER:$NEW_USER /home/$NEW_USER/.xprofile
 systemctl enable lightdm
 systemctl start lightdm
 
