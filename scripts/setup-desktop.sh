@@ -12,7 +12,7 @@ echo "=== Xuuki desktop setup (repo: $REPO_DIR, user: $NEW_USER) ==="
 
 # 1. Packages
 echo '--- Installing packages (needed set only) ---'
-pacman -S --needed --noconfirm base-devel git xorg-server xorg-xinit xorg-xterm \
+pacman -S --needed --noconfirm base-devel git xorg-server xorg-xinit xterm \
   libx11 libxft libxinerama lightdm lightdm-webkit2-greeter curl libxml2 \
   imagemagick feh papirus-icon-theme ttf-dejavu ttf-liberation
 
@@ -52,18 +52,19 @@ chown -R $NEW_USER:$NEW_USER /home/$NEW_USER/dwmblocks
 
 # 6. News ticker user service
 echo '--- Installing news ticker service ---'
-sudo -u $NEW_USER -H env XDG_CONFIG_HOME=/home/$NEW_USER/.config \
-  bash "$REPO_DIR/scripts/install-news-ticker.sh"
+machinectl shell $NEW_USER@.host /bin/bash "$REPO_DIR/dwmblocks/scripts/install-news-ticker.sh" 2>/dev/null || \
+  su - $NEW_USER -c "bash $REPO_DIR/dwmblocks/scripts/install-news-ticker.sh"
 
 # 7. Greeter (fixed setup-lightdm.sh: [Seat:*], [branding], session-wrapper, DMABUF env)
 echo '--- Greeter (lightdm + xuuki webkit) ---'
 bash "$REPO_DIR/scripts/setup-lightdm.sh"
 
+### Section marker
 # 8. Session + background + xinitrc
 echo '--- Session files ---'
 install -Dm 644 "$REPO_DIR/configs/lightdm/dwm.desktop" /usr/share/xsessions/dwm.desktop
 install -m 755 "$REPO_DIR/configs/dwm/start-dwm.sh"     /usr/local/bin/start-dwm.sh
-install -Dm 644 "$REPO_DIR/configs/backgrounds"         /usr/share/backgrounds/im.jpg
+install -Dm 644 "$REPO_DIR/configs/backgrounds.jpg"         /usr/share/backgrounds/im.jpg
 install -m 644 "$REPO_DIR/index.html"                   /usr/share/lightdm-webkit/themes/xuuki-greeter/index.html
 cat > /home/$NEW_USER/.xinitrc << EOF
 #!/bin/bash
