@@ -76,6 +76,7 @@ exec dwm
 EOF
 chown $NEW_USER:$NEW_USER /home/$NEW_USER/.xinitrc
 systemctl enable lightdm
+systemctl start lightdm
 
 # 9. Optional splash
 if [ "${1:-}" = "--with-splash" ]; then
