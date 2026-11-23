@@ -77,6 +77,20 @@ dwmblocks &
 exec dwm
 EOF
 chown $NEW_USER:$NEW_USER /home/$NEW_USER/.xinitrc
+
+# B-form userland autostart: xprofile + wallpaper generator
+cat > /home/$NEW_USER/.xprofile << XEOF
+#!/bin/sh
+# Xuuki desktop autostart (B: systemd-managed dwmblocks, auto-restart)
+if [ -x "$HOME/desktop.sh" ]; then
+  "$HOME/desktop.sh" &
+fi
+systemctl --user start dwmblocks.service
+XEOF
+chown $NEW_USER:$NEW_USER /home/$NEW_USER/.xprofile
+chmod +x /home/$NEW_USER/.xprofile
+install -m 755 "$REPO_DIR/desktop.sh" /home/$NEW_USER/desktop.sh
+chown $NEW_USER:$NEW_USER /home/$NEW_USER/desktop.sh
 # LightDM sessions source ~/.xprofile (NOT .xinitrc) via the Xsession wrapper:
 printf "#!/bin/bash
 dwmblocks &
