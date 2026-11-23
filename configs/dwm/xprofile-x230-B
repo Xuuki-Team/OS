@@ -1,0 +1,10 @@
+#!/bin/sh
+# Xuuki desktop autostart (B: systemd-managed dwmblocks, auto-restart)
+
+# Generate + set wallpaper each graphical login
+if [ -x "$HOME/desktop.sh" ]; then
+  "$HOME/desktop.sh" &
+fi
+
+# dwmblocks via systemd user service (Restart=always — self-healing)
+systemctl --user start dwmblocks.service
